@@ -34,15 +34,13 @@ CREATE TABLE authors (
 
 CREATE TABLE book (
     isbn varchar(13) NOT NULL,
-    -- author_id int NOT NULL references authors(author_id),
-    author_name VARCHAR(100) NOT NULL
+    author_id int NOT NULL references authors(author_id),
     title varchar(255) NOT NULL,
-    -- category varchar(50) NOT NULL,
-    -- price decimal(10,2) NOT NULL,
+    category varchar(50) NOT NULL,
+    price decimal(10,2) NOT NULL,
     available int NOT NULL,
-    borrowed int NOT NULL,
-    -- total int NOT NULL,
-    -- staff_id int NOT NULL references staff(staff_id),
+    total int NOT NULL,
+    staff_id int NOT NULL references staff(staff_id),
     PRIMARY KEY (isbn)
 );
 

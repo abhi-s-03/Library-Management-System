@@ -2,14 +2,13 @@ const { Router } = require('express');
 const router = Router();
 const controller = require('./controller');
 
-router.get('/', controller.getBooks);
-router.put('/', controller.addCopies);
-router.post('/', controller.addBooks);
-router.delete('/', controller.deleteBook);
-router.put('/', controller.deleteCopies);
-router.put('/', controller.borrowBooks);
-router.put('/', controller.returnBooks);
-router.put('/', controller.deleteCopies);
+router.get('/get', controller.getBooks);
+router.put('/addc', controller.addCopies);
+router.post('/add', controller.addBooks);
+router.delete('/del', controller.deleteBook);
+router.put('/delc', controller.deleteCopies);
+router.put('/bor', controller.borrowBooks);
+router.put('/ret', controller.returnBooks);
 
 
 module.exports = router;    
