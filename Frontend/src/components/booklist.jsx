@@ -3,21 +3,15 @@ import { BsPlus, BsTrash, BsSearch } from "react-icons/bs";
 // import { IoCloseSharp } from "react-icons/io5";
 import "./styles/booklist.css";
 // import DeleteBook from "./deletebook";
-// import AddCopy from "./addcopy";
+import AddCopy from "./addcopy";
 
 const BookList = () => {
   
-  // const [showAddCopyForm, setShowAddCopyForm] = useState(false);
-
+  const [showAddCopyForm, setShowAddCopyForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  
   const [books, setBookList] = useState([]);
-const getBookList = async () => {
-  const response = await fetch("http://localhost:5000/api/books/get");
-  const data = await response.json();
-  setBookList(data);
-  console.log(data);
-};
+  const [selectedBooksForCopy, setSelectedBooksForCopy] = useState([]);
+
 
   useEffect(() => {
    fetch("http://localhost:5000/api/books/get")
@@ -30,7 +24,22 @@ const getBookList = async () => {
       },[]);
   // const [showAddForm, setShowAddForm] = useState(false);
   // const [showDeleteForm, setShowDeleteForm] = useState(false);
+   const toggleAddCopyForm = () => {
+    setShowAddCopyForm(!showAddCopyForm);
+  };
   
+  const handleAddCopy = (copiesToAdd) => {
+    // Implement your logic to add copies to the selected books
+    console.log(`Adding ${copiesToAdd} copies to selected books`);
+    // Update the book list accordingly
+    // ...
+
+    // Reset the selected books for copy
+    setSelectedBooksForCopy([]);
+
+    // Close the add copy form
+    setShowAddCopyForm(false);
+  };
 
   return (
 
@@ -62,7 +71,7 @@ const getBookList = async () => {
           <button
             className="booklist-add-copy-button"
 
-            // onClick={toggleAddCopyForm}
+            onClick={toggleAddCopyForm}
           >
             <BsPlus /> Add New Copy
           </button>
@@ -81,7 +90,11 @@ const getBookList = async () => {
             </tr>
           </thead>
           <tbody>
-            {books.map((book) => (
+            {books
+            .filter((book) =>
+              book.title.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            .map((book)  => (
               console.log(book),
               <tr key={book.isbn}>
                 <td>{book.isbn}</td>
@@ -169,14 +182,14 @@ const getBookList = async () => {
           // bookTitle={bookToDelete ? bookToDelete.title : ""}
         />
       )} */}
-{/* 
+
       {showAddCopyForm && (
         <AddCopy
           onClose={() => setShowAddCopyForm(false)}
-          // onAddCopy={handleAddCopy}
-          // selectedBooks={selectedBooksForCopy}
+          onAddCopy={handleAddCopy}
+          selectedBooks={selectedBooksForCopy}
         />
-      )} */}
+      )}
 
     </main>
   );
@@ -281,21 +294,5 @@ export default BookList;
   // //   setShowDeleteForm(false);
   // // };
 
-  // const [selectedBooksForCopy, setSelectedBooksForCopy] = useState([]);
-
-  // const toggleAddCopyForm = () => {
-  //   setShowAddCopyForm(!showAddCopyForm);
-  // };
-
-  // const handleAddCopy = (copiesToAdd) => {
-  //   // Implement your logic to add copies to the selected books
-  //   console.log(`Adding ${copiesToAdd} copies to selected books`);
-  //   // Update the book list accordingly
-  //   // ...
-
-  //   // Reset the selected books for copy
-  //   setSelectedBooksForCopy([]);
-
-  //   // Close the add copy form
-  //   setShowAddCopyForm(false);
-  // };
+ 
+ 
