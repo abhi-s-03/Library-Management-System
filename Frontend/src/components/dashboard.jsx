@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { BsPeopleFill } from "react-icons/bs";
 import { PiBooksFill } from "react-icons/pi";
 import { BiSolidBusiness } from "react-icons/bi";
@@ -7,10 +8,25 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import "./styles/dashboard.css";
 
 function Dashboard() {
+
+  const [availableCount, setAvailableCount] = useState(0);
+
+  //setting total books value
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/dash/availableCount")
+     .then(res => res.json())
+     .then(
+       (result) => {
+         setAvailableCount(result);
+         console.log(result);
+       })
+       },[]);
+
   const bookData = [
     {
       name: "Available",
-      value: 400,
+      value: availableCount,
     },
     {
       name: "Borrowed",
