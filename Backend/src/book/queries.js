@@ -5,7 +5,8 @@ const addCopies = 'UPDATE book set total=total+$2,available=available+$2 where b
 const addBooks = 'INSERT INTO book(title,author_id,available,total) values($1 , (SELECT author_id from authors where author_name = $2) , $3 , $3)';
 //pass each value from loop
 const deleteBook = 'DELETE from book where book_id = $1 ';
-const deleteCopies = 'UPDATE book set available=available-1 where book_id=$1';
+const deleteCopies_avail = 'UPDATE book set total=total-$2, available = available-$2 where book_id=$1';
+const deleteCopies_borrow = 'UPDATE book set total=total-$2 where book_id=$1';
 const borrowBooks = 'UPDATE book set borrowed=borrowed+1 where book_id=$1';
 const returnBooks='UPDATE book set borrowed=borrowed-1 where book_id=$1';
 
@@ -14,7 +15,8 @@ module.exports = {
     addCopies,
     addBooks,
     deleteBook,
-    deleteCopies,
+    deleteCopies_avail,
+    deleteCopies_borrow,
     borrowBooks,
     returnBooks
 };
