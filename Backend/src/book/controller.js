@@ -9,10 +9,7 @@ const getBooks = async (req, res) => {
     });
 };
 const addCopies = async (req, res) => {
-    const val = req.body;
-    console.log(val);
-    const val1=val["copyBook"];
-    console.log(val);
+    const val1 = req.body;
     
     const book_id = val1["book_id"];
     const copy = val1["copy"];

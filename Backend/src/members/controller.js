@@ -17,7 +17,15 @@ const getReader= async (req, res) => {
 //     });
 // }
 const addReader = async (req, res) => {
-    pool.query(queries.addReader, (error, results) => {
+    const val = req.body;
+    const val1 = val["newReader"];
+    const name = val1["name"];
+    const email = val1["email"];
+    const phone = val1["phoneNumber"];
+    const address = val1["address"];
+    const password = "1234"
+    console.log(val1)
+    pool.query(queries.addReader,[name,email,address, phone],password, (error, results) => {
         if (error) {
             throw error;
         }
