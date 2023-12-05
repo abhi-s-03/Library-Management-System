@@ -33,9 +33,11 @@ const addBooks = async (req, res) => {
     const title = val1["title"];
     const author = val1["author"];
     const total = val1["total"];
-    pool.query(queries.addBooks, [title,author,total] ,(error, results) => {
+    pool.query(queries.addAuthors, [author] ,(error, results) => {
 
         if (error) {
+            
+
             console.log(error);
         }
         else{
@@ -44,6 +46,11 @@ const addBooks = async (req, res) => {
             
 
         }
+        pool.query(queries.addBooks, [title,author,total], (error, results) => {
+            if (error) {
+                throw error;
+            }
+        });
         res.status(200).json(results.rows);
     });
 };
@@ -96,6 +103,4 @@ module.exports = {
     addBooks,
     deleteBook,
     deleteCopies,
-    borrowBooks,
-    returnBooks
 };
