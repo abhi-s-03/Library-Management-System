@@ -53,4 +53,3 @@ CREATE TABLE issues_returns (
   return_date DATE,
   status VARCHAR(20) NOT NULL
 );
-
