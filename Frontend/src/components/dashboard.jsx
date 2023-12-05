@@ -74,13 +74,7 @@ function Dashboard() {
           </div>
           <h1>600</h1>
         </div>
-        <div className="card">
-          <div className="card-inner">
-            <h3>TOTAL PUBLISHERS</h3>
-            <BiSolidBusiness className="card_icon" />
-          </div>
-          <h1>250</h1>
-        </div>
+        
         <div className="card">
           <div className="card-inner">
             <h3>TOTAL MEMBERS</h3>
