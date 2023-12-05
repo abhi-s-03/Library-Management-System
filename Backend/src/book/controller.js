@@ -86,22 +86,7 @@ const deleteBook = async (req, res) => {
         res.status(200).json(results.rows);
     });
 };
-const borrowBooks = async (req, res) => {
-    pool.query(queries.borrowBooks, (error, results) => {
-        if (error) {
-            throw error;
-        }
-        res.status(200).json(results.rows);
-    });
-};
-const returnBooks = async (req, res) => {
-    pool.query(queries.returnBooks, (error, results) => {
-        if (error) {
-            throw error;
-        }
-        res.status(200).json(results.rows);
-    });
-};
+
 
 
 

@@ -16,7 +16,6 @@ module.exports = {
     addBooks,
     deleteBook,
     deleteCopies_avail,
-    deleteCopies_borrow,
-    borrowBooks,
-    returnBooks
+    deleteCopies_borrow
+    
 };
