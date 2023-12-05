@@ -3,7 +3,7 @@ const router = Router();
 const controller = require('./controller');
 
 router.get('/get', controller.getBooks);
-router.put('/addc', controller.addCopies);
+router.post('/addc', controller.addCopies);
 router.post('/add', controller.addBooks);
 router.delete('/del', controller.deleteBook);
 router.put('/delc', controller.deleteCopies);

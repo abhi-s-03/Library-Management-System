@@ -9,7 +9,16 @@ const getBooks = async (req, res) => {
     });
 };
 const addCopies = async (req, res) => {
-    pool.query(queries.addCopies, (error, results) => {
+    const val = req.body;
+    console.log(val);
+    const val1=val["copyBook"];
+    console.log(val);
+    
+    const book_id = val1["book_id"];
+    const copy = val1["copy"];
+    console.log(val1)
+    console.log(book_id," ",copy)
+    pool.query(queries.addCopies, [book_id,copy], (error, results) => {
         if (error) {
             throw error;
         }
@@ -21,12 +30,10 @@ const addBooks = async (req, res) => {
     const val = req.body;
     val1=val["newBook"];
     console.log(val1);
-    const isbn = val1["isbn"];
     const title = val1["title"];
     const author = val1["author"];
-    const available = val1["available"];
     const total = val1["total"];
-    pool.query(queries.addBooks, [isbn,title,author,available,total] ,(error, results) => {
+    pool.query(queries.addBooks, [title,author,total] ,(error, results) => {
 
         if (error) {
             console.log(error);

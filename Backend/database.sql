@@ -33,7 +33,7 @@ CREATE TABLE authors (
 
 
 CREATE TABLE book (
-    isbn varchar(13) NOT NULL,
+    book_id SERIAL,
     author_id int NOT NULL references authors(author_id),
     title varchar(255) NOT NULL,
     category varchar(50) NOT NULL,
@@ -41,14 +41,14 @@ CREATE TABLE book (
     available int NOT NULL,
     total int NOT NULL,
     staff_id int NOT NULL references staff(staff_id),
-    PRIMARY KEY (isbn)
+    PRIMARY KEY (book_id)
 );
 
 -- Table for Issues/Returns
 CREATE TABLE issues_returns (
   issue_return_id SERIAL PRIMARY KEY,
   member_id INT REFERENCES members(member_id) ON DELETE CASCADE,
-  isbn varchar(13) REFERENCES book(isbn) ON DELETE CASCADE,
+  book_id int REFERENCES book(book_id) ON DELETE CASCADE,
   issue_date DATE,
   return_date DATE,
   status VARCHAR(20) NOT NULL
