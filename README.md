@@ -25,7 +25,7 @@
 - Indexes:
   - `authors_pkey` PRIMARY KEY, btree (author_id)
 - Referenced by:
-  - TABLE "book" CONSTRAINT "book_author_id_fkey" FOREIGN KEY (author_id) REFERENCES authors(author_id)
+  - TABLE `book` CONSTRAINT `book_author_id_fkey` FOREIGN KEY (author_id) REFERENCES authors(author_id)
 
 ### Table: book
 
@@ -42,7 +42,10 @@
 - Foreign-key constraints:
   - `book_author_id_fkey` FOREIGN KEY (author_id) REFERENCES authors(author_id)
 - Referenced by:
-  - TABLE "issues_returns" CONSTRAINT "fk_issue_returns" FOREIGN KEY (book_id) REFERENCES book(book_id)
+  - TABLE `issues_returns` CONSTRAINT `fk_issue_returns` FOREIGN KEY (book_id) REFERENCES book(book_id)
+- Triggers:
+  - `non_neg` BEFORE INSERT OR UPDATE ON `book` FOR EACH ROW EXECUTE FUNCTION `books_not_neg()`
+
 
 ### Table: issues_returns
 
@@ -75,7 +78,7 @@
 - Indexes:
   - `members_pkey` PRIMARY KEY, btree (member_id)
 - Referenced by:
-  - TABLE "issues_returns" CONSTRAINT "issues_returns_member_id_fkey" FOREIGN KEY (member_id) REFERENCES members(member_id) ON DELETE CASCADE
+  - TABLE `issues_returns` CONSTRAINT `issues_returns_member_id_fkey` FOREIGN KEY (member_id) REFERENCES members(member_id) ON DELETE CASCADE
 
 ### Table: staff
 
@@ -87,4 +90,4 @@
 - Indexes:
   - `staff_pkey` PRIMARY KEY, btree (staff_id)
 - Referenced by:
-  - TABLE "authentication_system" CONSTRAINT "authentication_system_staff_id_fkey" FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
+  - TABLE `authentication_system` CONSTRAINT "authentication_system_staff_id_fkey" FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
