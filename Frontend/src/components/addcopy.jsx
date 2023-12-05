@@ -66,6 +66,7 @@ const AddCopy = ({ onClose, onAddCopy, bookTitle }) => {
             <th>Author</th>
             <th>Available Copies</th>
             <th>Borrowed Copies</th>
+            <th>Publis</th>
           </tr>
         </thead>
         {/* Table body */}
@@ -85,7 +86,7 @@ const AddCopy = ({ onClose, onAddCopy, bookTitle }) => {
                 </td>
                 <td>{book.isbn}</td>
                 <td>{book.title}</td>
-                <td>{book.author}</td>
+                <td>{book.author_name}</td>
                 <td>{book.available}</td>
                 <td>{book.borrowed}</td>
               </tr>

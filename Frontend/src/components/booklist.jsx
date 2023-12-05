@@ -1,18 +1,34 @@
 import { useState, useEffect } from "react";
 import { BsPlus, BsTrash, BsSearch } from "react-icons/bs";
-// import { IoCloseSharp } from "react-icons/io5";
+import { IoCloseSharp } from "react-icons/io5";
 import "./styles/booklist.css";
-// import DeleteBook from "./deletebook";
-import AddCopy from "./addcopy";
+import DeleteBook from "./deletebook";
+// import AddCopy from "./addcopy";
 
 const BookList = () => {
   
-  const [showAddCopyForm, setShowAddCopyForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [books, setBookList] = useState([]);
-  const [selectedBooksForCopy, setSelectedBooksForCopy] = useState([]);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
 
-
+  const [newBook, setNewBook] = useState({
+    isbn: "",
+    title: "",
+    author: "",
+    available: 0,
+    total: 0,
+  });
+const addBookVal = () => {
+  fetch("http://localhost:5000/api/books/get")
+    .then(res => res.json())
+    .then(
+      (result) => {
+        setBookList(result);
+        console.log(result);
+      })
+      }
+    
   useEffect(() => {
    fetch("http://localhost:5000/api/books/get")
     .then(res => res.json())
@@ -22,25 +38,52 @@ const BookList = () => {
         console.log(result);
       })
       },[]);
-  // const [showAddForm, setShowAddForm] = useState(false);
-  // const [showDeleteForm, setShowDeleteForm] = useState(false);
-   const toggleAddCopyForm = () => {
-    setShowAddCopyForm(!showAddCopyForm);
+
+  
+  const toggleAddForm = () => {
+    setShowAddForm(!showAddForm);
+  };
+
+  const onSubmitAdd = async () => {
+    try {
+      const body = {newBook};
+      console.log(body);
+      const val = await fetch("http://localhost:5000/api/books/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      console.log("On submit",val);
+      console.log(newBook);
+      setShowAddForm(false);
+      addBookVal();
+
+      console.log(newBook)
+    } catch (err) {
+      console.error(err.message);
+    }
   };
   
-  const handleAddCopy = (copiesToAdd) => {
-    // Implement your logic to add copies to the selected books
-    console.log(`Adding ${copiesToAdd} copies to selected books`);
-    // Update the book list accordingly
-    // ...
+  const handleAddBook = () => {
+    console.log("On handle",newBook);
 
-    // Reset the selected books for copy
-    setSelectedBooksForCopy([]);
+    // Validate that the ID is provided
+    if (!newBook.isbn) {
+      alert("Please provide a Book ID.");
+      return;
+    }
+    
+    onSubmitAdd();
 
-    // Close the add copy form
-    setShowAddCopyForm(false);
+
+  }
+
+  const handleDeleteConfirm = () => {
+    // Implement your book deletion logic here
+    console.log(`Deleting book: ${bookToDelete.title}`);
+    // Close the overlay
+    setShowDeleteForm(false);
   };
-
   return (
 
     <main className="booklist-main-container">
@@ -64,14 +107,14 @@ const BookList = () => {
             <BsTrash /> Delete a Book
           </button>
           <button className="booklist-add-book-button" 
-          // onClick={toggleAddForm}
+          onClick={toggleAddForm}
           >
             <BsPlus /> Add New Book
           </button>
           <button
             className="booklist-add-copy-button"
 
-            onClick={toggleAddCopyForm}
+            // onClick={toggleAddCopyForm}
           >
             <BsPlus /> Add New Copy
           </button>
@@ -115,9 +158,9 @@ const BookList = () => {
         </table>
       </div>
 
-      {/* {showAddForm && (
-        <div className="booklist-add-form">
-          <div className="form-header">
+      {showAddForm && (
+        <div className="booklist-add-form" >
+          <div className="form-header" >
             <h3>Add New Book</h3>
             <button
               className="close-button"
@@ -130,74 +173,94 @@ const BookList = () => {
           <label>Book ID:</label>
           <input
             type="text"
-            // value={newBook.isbn}
-            // onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
+            value={newBook.isbn}
+            onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
           />
 
           <label>Title:</label>
           <input
             type="text"
-            // value={newBook.title}
-            // onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}
+            value={newBook.title}
+            onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}
           />
 
           <label>Author:</label>
           <input
             type="text"
-            // value={newBook.author}
-            // onChange={(e) => setNewBook({ ...newBook, author: e.target.value })}
+            value={newBook.author}
+            onChange={(e) => setNewBook({ ...newBook, author: e.target.value })}
           />
 
           <label>Available Copies:</label>
           <input
             type="number"
-            // value={newBook.available}
-            // onChange={(e) =>
-              // setNewBook({ ...newBook, available: e.target.value })
-            // }
+            value={newBook.available}
+            onChange={(e) =>
+              setNewBook({ ...newBook, available: e.target.value })
+            }
           />
 
           <label>Total Copies:</label>
           <input
             type="number"
-            // value={newBook.borrowed}
-            // onChange={(e) =>
-              // setNewBook({ ...newBook, borrowed: e.target.value })
-            // }
+            value={newBook.total}
+            onChange={(e) =>
+              setNewBook({ ...newBook, total: e.target.value })
+            }
           />
 
           <button className="center-align-button" 
-          // onClick={handleAddBook}
+          onClick={handleAddBook}
           >
             Add Book
           </button>
         </div>
-      )} */}
+      )
+      }
 
       {/* Overlay for DeleteBook */}
-      {/* {showDeleteForm && (
+      {showDeleteForm && (
         <DeleteBook
           onClose={() => setShowDeleteForm(false)} // Make sure onClose is passed correctly
-          // onDelete={handleDeleteConfirm}
-          // bookTitle={bookToDelete ? bookToDelete.title : ""}
+          onDelete={handleDeleteConfirm}
+          
         />
-      )} */}
+      )}
 
-      {showAddCopyForm && (
+      {/* {showAddCopyForm && (
         <AddCopy
           onClose={() => setShowAddCopyForm(false)}
           onAddCopy={handleAddCopy}
           selectedBooks={selectedBooksForCopy}
         />
-      )}
+      )} */}
 
     </main>
   );
 };
 
+
 export default BookList;
 
 
+  // const [showAddCopyForm, setShowAddCopyForm] = useState(false);
+  // const [selectedBooksForCopy, setSelectedBooksForCopy] = useState([]);
+  //  const toggleAddCopyForm = () => {
+  //   setShowAddCopyForm(!showAddCopyForm);
+  // };
+  
+  // const handleAddCopy = (copiesToAdd) => {
+  //   // Implement your logic to add copies to the selected books
+  //   console.log(`Adding ${copiesToAdd} copies to selected books`);
+  //   // Update the book list accordingly
+  //   // ...
+
+  //   // Reset the selected books for copy
+  //   // setSelectedBooksForCopy([]);
+
+  //   // Close the add copy form
+  //   // setShowAddCopyForm(false);
+  // };
   // useEffect(() => {
   //   // Update the availability status for each book
   //   const updatedBookList = initialBooks.map((book) => {
@@ -232,21 +295,10 @@ export default BookList;
   //   return available > 0 ? "Yes" : "No";
   // };
 
-  //const [newBook, setNewBook] = useState({
-  //   isbn: "",
-  //   title: "",
-  //   author: "",
-  //   available: 0,
-  //   borrowed: 0,
-  // });
 
 
-  // const handleAddBook = () => {
-  //   // Validate that the ID is provided
-  //   if (!newBook.isbn) {
-  //     alert("Please provide a Book ID.");
-  //     return;
-  //   }
+
+  
 
   //   // Set availability to 'Yes' for the new book
   //   const newBookWithAvailability = { ...newBook, availability: "Yes" };
@@ -264,30 +316,13 @@ export default BookList;
   //   // Close the delete form
   //   setShowDeleteForm(false);
 
-  //   // Reset the new book state for the next entry
-  //   setNewBook({
-  //     isbn: "",
-  //     title: "",
-  //     author: "",
-  //     available: 0,
-  //     borrowed: 0,
-  //   });
-  // };
 
-  // const toggleAddForm = () => {
-  //   setShowAddForm(!showAddForm);
-  // };
 
   // const toggleDeleteForm = () => {
   //   setShowDeleteForm(!showDeleteForm);
   // };
 
-  // const handleDeleteConfirm = () => {
-  //   // Implement your book deletion logic here
-  //   // console.log(`Deleting book: ${bookToDelete.title}`);
-  //   // Close the overlay
-  //   setShowDeleteForm(false);
-  // };
+  
 
   // // const handleDeleteCancel = () => {
   // //   // Close the overlay

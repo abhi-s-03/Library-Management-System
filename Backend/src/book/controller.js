@@ -16,10 +16,26 @@ const addCopies = async (req, res) => {
         res.status(200).json(results.rows);
     });
 };
+
 const addBooks = async (req, res) => {
-    pool.query(queries.addBooks, (error, results) => {
+    const val = req.body;
+    val1=val["newBook"];
+    console.log(val1);
+    const isbn = val1["isbn"];
+    const title = val1["title"];
+    const author = val1["author"];
+    const available = val1["available"];
+    const total = val1["total"];
+    pool.query(queries.addBooks, [isbn,title,author,available,total] ,(error, results) => {
+
         if (error) {
-            throw error;
+            console.log(error);
+        }
+        else{
+            const {newBook} = req.body;
+            console.log(newBook);
+            
+
         }
         res.status(200).json(results.rows);
     });
