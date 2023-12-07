@@ -3,21 +3,62 @@ import "./styles/issueReturn.css";
 
 function IssueReturn() {
   const [userId, setUserId] = useState("");
-  const [isValidUser, setIsValidUser] = useState(false);
+  const [isValidUser, setIsValidUser] = useState(true);
   const [selectedAction, setSelectedAction] = useState("");
-  const [bookId, setBookId] = useState("");
   const [bookAvailable, setBookAvailable] = useState(true);
+  const [issueBook, setBook] = useState({
+    member_id: "",
+    book_id: ""
+  });
+  console.log("1",issueBook)
+  const  handleBookSelection = async()=> {
+      try {
+        const body = issueBook ;
+        console.log(body);
+        const val = await fetch("http://localhost:5000/api/isr/issue", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        console.log("On submit",val);
+        console.log(issueBook );
+        console.log(issueBook )
+       
+      } catch (err) {
+        console.error(err.message);
+      }
+      console.log(issueBook );
 
-  function handleBookSelection(book) {
-    // Implement logic to handle book selection
-  }
+      // window.location.reload(false)
+    }
+  
 
-  function handleBookReturn(book) {
+  const  handleBookReturn = async()=> {
     // Implement logic to return the book
+    try {
+      const body = issueBook ;
+      console.log(body);
+      const val = await fetch("http://localhost:5000/api/isr/returnBook", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      console.log("On submit",val);
+      console.log(issueBook )
+     
+    } catch (err) {
+      console.error(err.message);
+    }
+    console.log(issueBook );
+
+    // window.location.reload(false)
+
+    
   }
 
-  function validateUser(userId) {
+  function validateUser() {
     // Implement logic to validate the user
+    console.log(issueBook)
     setIsValidUser(true);
   }
 
@@ -29,18 +70,19 @@ function IssueReturn() {
   return (
     <div className="container">
       <h2>Issue and Return Books</h2>
-      <div className="user-input">
+      {/* <div className="user-input">
         <label htmlFor="userId">User ID:</label>
         <input
           type="text"
           id="userId"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
+          value={issueBook.member_id}
+          onChange={(e) => setBook({ ...issueBook.member_id, member_id: e.target.value })}
+          
         />
-        <button onClick={() => validateUser(userId)} className="action-button">
+        <button onClick={validateUser} className="action-button">
           Validate
         </button>
-      </div>
+      </div> */}
 
       {isValidUser && (
         <div className="button-group">
@@ -53,14 +95,23 @@ function IssueReturn() {
 
       {selectedAction === "issue" && (
         <div>
+          <label htmlFor="userId" className="user-input">User ID:</label>
+        <input
+          type="text"
+          id="userId"
+          value={issueBook.member_id}
+          onChange={(e) => setBook({ ...issueBook, member_id: e.target.value })}
+          
+        />
           <div className="book-input">
             <label htmlFor="bookId">Book ID:</label>
             <input
               type="text"
               id="bookId"
-              value={bookId}
-              onChange={(e) => setBookId(e.target.value)}
+              value={issueBook.book_id}
+              onChange={(e) => setBook({ ...issueBook, book_id: e.target.value })}
             />
+            
             <button
               onClick={() => searchBookAvailability(bookId)}
               className="action-button"
@@ -70,7 +121,7 @@ function IssueReturn() {
           </div>
           {bookAvailable && (
             <button
-              onClick={() => handleBookSelection(bookId)}
+              onClick={() => handleBookSelection()}
               className="action-button"
             >
               Issue
@@ -82,31 +133,40 @@ function IssueReturn() {
 
       {selectedAction === "return" && (
         <div>
-          <div className="book-input">
-            <label htmlFor="bookId">Book ID:</label>
-            <input
-              type="text"
-              id="bookId"
-              value={bookId}
-              onChange={(e) => setBookId(e.target.value)}
-            />
-            <button
-              onClick={() => searchBookAvailability(bookId)}
-              className="action-button"
-            >
-              Search
-            </button>
-          </div>
-          {bookAvailable && (
-            <button
-              onClick={() => handleBookReturn(bookId)}
-              className="action-button"
-            >
-              Return
-            </button>
-          )}
-          {!bookAvailable && <div className="error">Book is not available</div>}
+        <label htmlFor="userId" className="user-input">User ID:</label>
+        <input
+          type="text"
+          id="userId"
+          value={issueBook.member_id}
+          onChange={(e) => setBook({ ...issueBook.member_id, member_id: e.target.value })}
+          
+        />
+        <div className="book-input">
+          <label htmlFor="bookId">Book ID:</label>
+          <input
+            type="text"
+            id="bookId"
+            value={issueBook.book_id}
+            onChange={(e) => setBook({ ...issueBook.book_id, book_id: e.target.value })}
+          />
+          
+          <button
+            onClick={() => searchBookAvailability(bookId)}
+            className="action-button"
+          >
+            Search
+          </button>
         </div>
+        {bookAvailable && (
+          <button
+            onClick={() => handleBookReturn()}
+            className="action-button"
+          >
+            Issue
+          </button>
+        )}
+        {!bookAvailable && <div className="error">Book is not available</div>}
+      </div>
       )}
     </div>
   );
